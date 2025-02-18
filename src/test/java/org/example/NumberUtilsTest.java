@@ -229,6 +229,27 @@ class NumberUtilsTest {
     }
 
     @Test
+    @Tag("increase mutation coverage")
+    void outputMultipleDigits1() {
+        // Test case #12
+
+        List<Integer> left = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+        List<Integer> expected = new ArrayList<>();
+
+        expected.add(1);
+        expected.add(3);
+        expected.add(5);
+        left.add(1);
+        left.add(2);
+        left.add(3);
+        right.add(1);
+        right.add(2);
+
+        assertEquals(expected, util.add(left, right));
+    }
+
+    @Test
     @Tag("output: Length > Greater Left | Right Length")
     // Output length is greater than greater of (left | right) length
     void outputGreaterLength() {
@@ -288,7 +309,6 @@ class NumberUtilsTest {
 
     @Test
     @Tag("left: empty, right: empty, output: [0]")
-    @Disabled
     void emptyLeftRight() {
         // Test case #15
 
@@ -296,9 +316,110 @@ class NumberUtilsTest {
         List<Integer> right = new ArrayList<>();
         List<Integer> expected = new ArrayList<>();
 
-        expected.add(0);
+//        expected.add(0);
 
        assertEquals(expected, util.add(left, right));
+    }
+
+    @Test()
+    void badLeft() {
+        // Test case #15
+
+        List<Integer> l1 = new ArrayList<>();
+        List<Integer> l2 = new ArrayList<>();
+        List<Integer> l3 = new ArrayList<>();
+        List<Integer> l4 = new ArrayList<>();
+        List<Integer> good = new ArrayList<>();
+
+        List<Integer> e3 = new ArrayList<>();
+        List<Integer> e4 = new ArrayList<>();
+
+
+        l1.add(-1); //bad, Left < 0
+        l2.add(10); //bad, left >9
+        l3.add(0);
+        l4.add(9);
+        good.add(1);
+
+        e3.add(1);
+        e4.add(1);
+        e4.add(0);
+
+
+
+        assertEquals(e3, util.add(l3, good));
+        assertEquals(e4, util.add(l4, good));
+        assertThrows(IllegalArgumentException.class, ()->util.add(l1, good));
+        assertThrows(IllegalArgumentException.class, ()->util.add(l2, good));
+    }
+
+    @Test()
+    void badRight() {
+        // Test case #15
+
+        List<Integer> good = new ArrayList<>();
+
+        List<Integer> r1 = new ArrayList<>();
+        List<Integer> r2 = new ArrayList<>();
+        List<Integer> r3 = new ArrayList<>();
+        List<Integer> r4 = new ArrayList<>();
+
+        List<Integer> e3 = new ArrayList<>();
+        List<Integer> e4 = new ArrayList<>();
+
+
+        r1.add(-1); //bad, Left < 0
+        r2.add(10); //bad, left >9
+        r3.add(0);
+        r4.add(9);
+        good.add(1);
+
+        e3.add(1);
+        e4.add(1);
+        e4.add(0);
+
+        assertEquals(e3, util.add(good, r3));
+        assertEquals(e4, util.add(good, r4));
+        assertThrows(IllegalArgumentException.class, ()->util.add(good, r1));
+        assertThrows(IllegalArgumentException.class, ()->util.add(good, r2));
+    }
+
+    @Test()
+    void badBoth() {
+        // Test case #15
+
+        List<Integer> l1 = new ArrayList<>();
+        List<Integer> l2 = new ArrayList<>();
+
+        List<Integer> r1 = new ArrayList<>();
+        List<Integer> r2 = new ArrayList<>();
+
+
+        l1.add(-1); //bad, Left < 0
+        r1.add(10); //bad, Left < 0
+
+        l2.add(10); //bad, left >9
+        r2.add(-1); //bad, left >9
+
+        assertThrows(IllegalArgumentException.class, ()->util.add(l1, r1));
+        assertThrows(IllegalArgumentException.class, ()->util.add(l2, r2));
+    }
+
+    @Test()
+    void mutant() {
+
+        List<Integer> empty = new ArrayList<>();
+        List<Integer> l = new ArrayList<>();
+        List<Integer> r = new ArrayList<>();
+        List<Integer> expected = new ArrayList<>();
+
+        l.add(0);
+        r.add(0);
+        expected.add(0);
+
+        assertEquals(expected, util.add(l, r));
+        assertEquals(expected, util.add(l, empty));
+        assertEquals(expected, util.add(empty, r));
     }
 
 }
